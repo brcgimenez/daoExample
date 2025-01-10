@@ -1,0 +1,30 @@
+services:
+  # Adicionando serviço do DB postgres
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  # Adicionando serviço do pgadmin
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on: # Informa ao docker que o serviço pgadmin depende do serviço postgres para ser executado
+      - postgres
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
