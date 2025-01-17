@@ -1,19 +1,20 @@
 package org.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import org.example.refact2.configs.Database;
+import org.example.refact2.configs.PostgresDatabaseConnection;
+import org.example.refact2.controller.ClienteController;
+import org.example.refact2.repository.ClienteDatabaseRepository;
+import org.example.refact2.services.ClienteRepository;
+import org.example.refact2.services.ClienteService;
+
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         System.out.println("Hello, World!");
-//        String url = "jdbc:postgresql://localhost:5432/mydb";
-//        String user = "myuser";
-//        String password = "mypassword";
-//        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-//            System.out.println("Connection successful");
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        Database database = new PostgresDatabaseConnection();
+        ClienteRepository clienteRepository = new ClienteDatabaseRepository(database);
+        ClienteService clienteService = new ClienteService(clienteRepository);
+        new ClienteController(clienteService);
     }
 }

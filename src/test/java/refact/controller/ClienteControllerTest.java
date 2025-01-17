@@ -2,7 +2,11 @@ package refact.controller;
 
 import org.example.refact.controller.ClienteController;
 import org.example.refact.dao.ClienteDAO;
+import org.example.refact.dao.Database;
+import org.example.refact.dao.DatabaseConnection;
 import org.junit.jupiter.api.Test;
+
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -10,11 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ClienteControllerTest {
     @Test
-    void deveSalvarUmCliente() {
+    void deveSalvarUmCliente() throws SQLException {
         // Given - Arrange
         var input = new ClienteController.Input("Bruno", "bruno@gmail.com", "123456", "ATIVO");
         // When - Act
-        ClienteDAO clienteDao = new ClienteDAO();
+        DatabaseConnection connection = new DatabaseConnection();
+        Database database = new Database(connection);
+        ClienteDAO clienteDao = new ClienteDAO(database);
         ClienteController clienteController = new ClienteController(clienteDao);
         ClienteController.Output output = clienteController.salvar(input);
         // Then - Assertion
@@ -26,11 +32,13 @@ public class ClienteControllerTest {
 
 
     @Test
-    void deveConsultarOsDadosDeUmCliente() {
+    void deveConsultarOsDadosDeUmCliente() throws SQLException {
         // Given - Arrange
         var inputSalvar = new ClienteController.Input("Bruno", "bruno@gmail.com", "123456", "ATIVO");
         // When - Act
-        ClienteDAO clienteDao = new ClienteDAO();
+        DatabaseConnection connection = new DatabaseConnection();
+        Database database = new Database(connection);
+        ClienteDAO clienteDao = new ClienteDAO(database);
         ClienteController clienteController = new ClienteController(clienteDao);
         var outputSalvar = clienteController.salvar(inputSalvar);
         var outputConsultar = clienteController.consultarPorId(outputSalvar.id());
